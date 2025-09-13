@@ -7,8 +7,10 @@ group = 'org.luaj'
 version = '3.0.2'
 
 // Java version compatibility
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 // Source sets
 sourceSets {
@@ -17,7 +19,6 @@ sourceSets {
             srcDirs = ['src/core', 'src/jse']
         }
     }
-    // Exclude tests for now since they reference JME classes we're not including
 }
 
 repositories {
@@ -26,19 +27,16 @@ repositories {
 
 dependencies {
     // Apache BCEL for bytecode manipulation (needed for luajc compiler)
-    compile 'org.apache.bcel:bcel:6.5.0'
+    implementation 'org.apache.bcel:bcel:6.5.0'
+    
+    // JUnit for testing
+    testImplementation 'junit:junit:4.13.2'
 }
 
 // Compilation options
-compileJava {
+tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-    // Workaround for the 'yield' keyword issue in newer Java versions
-    options.compilerArgs << "-Xlint:-options"
-}
-
-compileTestJava {
-    options.encoding = 'UTF-8'
 }
 
 // JAR configurations
@@ -53,17 +51,29 @@ jar {
 }
 
 // Create a sources JAR
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+java {
+    withSourcesJar()
+}
+
+// Create a Javadoc JAR
+java {
+    withJavadocJar()
 }
 
 // Disable javadoc task due to compilation issues with newer Java versions
 javadoc.enabled = false
 
-// Artifacts
-artifacts {
-    archives sourcesJar
+// Test configuration
+test {
+    useJUnit()
+    
+    // Set maximum heap size for tests
+    maxHeapSize = "1G"
+    
+    // Show test results
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 // Custom task to run Lua scripts
@@ -72,6 +82,6 @@ task runLua(type: JavaExec) {
     description = 'Run a Lua script using Luaj'
     
     classpath = sourceSets.main.runtimeClasspath
-    main = 'lua'
+    mainClass = 'lua'
     args = ['examples/lua/hello.lua']
 }

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Luaj is a Java-based implementation of the Lua programming language, specifically targeting Lua 5.2.x. It provides a lightweight, high-performance execution environment for Lua scripts that can run on various Java platforms including JSE (Java Standard Edition) and JEE (Java Enterprise Edition).
+Luaj is a Java-based implementation of the Lua programming language, specifically targeting Lua 5.2.x. It provides a lightweight, high-performance execution environment for Lua scripts that can run on Java SE (Java Standard Edition) and JEE (Java Enterprise Edition) platforms.
 
 Key features of Luaj:
 - Java-centric implementation of the Lua VM
@@ -15,15 +15,12 @@ Key features of Luaj:
 ## Project Structure
 
 ```
-├── build.xml                 # Main Ant build file
-├── build-libs.xml            # Dependency management for build tools
-├── build.gradle              # Gradle build file (newly added)
-├── settings.gradle           # Gradle settings file (newly added)
-├── gradle.properties         # Gradle properties file (newly added)
+├── build.gradle              # Gradle build file
+├── settings.gradle           # Gradle settings file
+├── gradle.properties         # Gradle properties file
 ├── examples/                 # Example code for various use cases
 │   ├── jse/                  # Java SE examples
-│   ├── lua/                  # Lua script examples
-│   └── maven/                # Maven integration example
+│   └── lua/                  # Lua script examples
 ├── src/                      # Source code
 │   ├── core/                 # Core Lua implementation
 │   └── jse/                  # Java SE specific extensions
@@ -37,27 +34,11 @@ Key features of Luaj:
 
 ### Prerequisites
 - Java Development Kit (JDK) 8 or higher
-- Apache Ant build tool (for Ant build)
-- Gradle build tool (for Gradle build)
-
-### Building the Project with Ant
-
-The project uses Apache Ant for building:
-
-```bash
-# Build JSE version (JME support has been removed due to compatibility issues)
-ant jar-jse
-
-# Build JSE version with sources
-ant jar-jse-sources
-
-# Clean build artifacts
-ant clean
-```
+- Gradle build tool
 
 ### Building the Project with Gradle
 
-The project now also supports Gradle for building:
+The project now uses Gradle for building:
 
 ```bash
 # Build the project
@@ -74,18 +55,18 @@ The project now also supports Gradle for building:
 
 To run the basic "Hello World" example:
 ```bash
-java -cp luaj-jse-3.0.2.jar lua examples/lua/hello.lua
+java -cp build/libs/luaj-3.0.2.jar lua examples/lua/hello.lua
 ```
 
 To run a Swing application example:
 ```bash
-java -cp luaj-jse-3.0.2.jar lua examples/lua/swingapp.lua
+java -cp build/libs/luaj-3.0.2.jar lua examples/lua/swingapp.lua
 ```
 
 To run a Java application that uses Luaj:
 ```bash
-javac -cp luaj-jse-3.0.2.jar examples/jse/SampleJseMain.java
-java -cp "luaj-jse-3.0.2.jar;examples/jse" SampleJseMain
+javac -cp build/libs/luaj-3.0.2.jar examples/jse/SampleJseMain.java
+java -cp "build/libs/luaj-3.0.2.jar:examples/jse" SampleJseMain
 ```
 
 ## Using Luaj in Applications
@@ -186,13 +167,13 @@ System.out.println("y=" + e.get("y"));
 ### Testing
 Unit tests are organized using JUnit 3 and can be run with:
 ```bash
-ant test
+./gradlew test
 ```
 
 ### Documentation
 API documentation is generated using Javadoc and can be built with:
 ```bash
-ant doc
+./gradlew javadoc
 ```
 
 ## Version Information
@@ -203,14 +184,8 @@ This version supports Lua 5.2.x features including:
 - yield from pcall or metatags
 - Bitwise operator library
 
-## Known Limitations
-- Debug code may not be completely removed by some obfuscators
-- Tail calls are not tracked in debug information
-- Values associated with weak keys may linger longer than expected
-- Shared metatables are shared across `Globals` instances in the same class loader
-
 ## Recent Changes
-- Removed JME (Java Micro Edition) support due to compatibility issues with modern Java versions
+- Removed J2ME (Java Micro Edition) support to simplify the codebase and focus on modern Java platforms
+- Removed Ant build system in favor of Gradle for modern Java development workflows
 - Fixed `yield` keyword conflict in CoroutineLib.java by renaming the class to `yieldFunction`
-- Added Gradle build support for modern Java development workflows
 - Updated Java source and target compatibility to version 8
