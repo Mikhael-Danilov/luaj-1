@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Luaj is a Java-based implementation of the Lua programming language, specifically targeting Lua 5.2.x. It provides a lightweight, high-performance execution environment for Lua scripts that can run on Java SE (Java Standard Edition) and JEE (Java Enterprise Edition) platforms.
+This is a fork of Luaj specifically targeted to be compatible with TeaVM, a Java-to-JavaScript transpiler. Luaj is a Java-based implementation of the Lua programming language, specifically targeting Lua 5.2.x. It provides a lightweight, high-performance execution environment for Lua scripts that can run on Java SE (Java Standard Edition) and JEE (Java Enterprise Edition) platforms.
 
 Key features of Luaj:
 - Java-centric implementation of the Lua VM
@@ -11,6 +11,7 @@ Key features of Luaj:
 - Good performance, often faster than C-based Lua in some benchmarks
 - Support for both interpreted execution and compilation to Java bytecode
 - Thread safety with proper isolation between threads
+- TeaVM compatibility for running in web browsers
 
 ## Project Structure
 
@@ -29,6 +30,15 @@ Key features of Luaj:
 ├── docs/                     # Documentation
 └── grammar/                  # JavaCC grammar files for Lua parser
 ```
+
+## TeaVM Compatibility
+
+This fork of Luaj has been modified to be compatible with TeaVM, which allows the Lua interpreter to run in web browsers by transpiling the Java code to JavaScript. Key modifications for TeaVM compatibility include:
+
+- Removal of J2ME code to simplify the codebase
+- Removal of Ant build system in favor of Gradle
+- Updates to ensure compatibility with TeaVM's JavaScript generation
+- Focus on JSE-only implementation for better transpilation results
 
 ## Building and Running
 
@@ -189,3 +199,4 @@ This version supports Lua 5.2.x features including:
 - Removed Ant build system in favor of Gradle for modern Java development workflows
 - Fixed `yield` keyword conflict in CoroutineLib.java by renaming the class to `yieldFunction`
 - Updated Java source and target compatibility to version 8
+- Modified codebase for TeaVM compatibility
