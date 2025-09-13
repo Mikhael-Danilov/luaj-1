@@ -1,0 +1,77 @@
+plugins {
+    id 'java-library'
+}
+
+// Project information
+group = 'org.luaj'
+version = '3.0.2'
+
+// Java version compatibility
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Source sets
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/core', 'src/jse']
+        }
+    }
+    // Exclude tests for now since they reference JME classes we're not including
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Apache BCEL for bytecode manipulation (needed for luajc compiler)
+    compile 'org.apache.bcel:bcel:6.5.0'
+}
+
+// Compilation options
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    // Workaround for the 'yield' keyword issue in newer Java versions
+    options.compilerArgs << "-Xlint:-options"
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+// JAR configurations
+jar {
+    manifest {
+        attributes(
+            'Implementation-Title': 'Luaj',
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': 'Luaj.org'
+        )
+    }
+}
+
+// Create a sources JAR
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+// Disable javadoc task due to compilation issues with newer Java versions
+javadoc.enabled = false
+
+// Artifacts
+artifacts {
+    archives sourcesJar
+}
+
+// Custom task to run Lua scripts
+task runLua(type: JavaExec) {
+    group = 'Execution'
+    description = 'Run a Lua script using Luaj'
+    
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'lua'
+    args = ['examples/lua/hello.lua']
+}
