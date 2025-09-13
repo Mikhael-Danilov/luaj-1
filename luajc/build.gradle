@@ -12,20 +12,17 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-// Source sets
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/core']
-        }
-    }
-}
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // Depend on the main luaj module
+    api project(':')
+    
+    // Apache BCEL for bytecode manipulation (needed for luajc compiler)
+    implementation 'org.apache.bcel:bcel:6.5.0'
+    
     // JUnit for testing
     testImplementation 'junit:junit:4.13.2'
 }
@@ -40,7 +37,7 @@ tasks.withType(JavaCompile) {
 jar {
     manifest {
         attributes(
-            'Implementation-Title': 'Luaj',
+            'Implementation-Title': 'Luaj Compiler',
             'Implementation-Version': project.version,
             'Implementation-Vendor': 'Luaj.org'
         )
@@ -60,25 +57,12 @@ java {
 // Disable javadoc task due to compilation issues with newer Java versions
 javadoc.enabled = false
 
-// Test configuration
-test {
-    useJUnit()
-    
-    // Set maximum heap size for tests
-    maxHeapSize = "1G"
-    
-    // Show test results
-    testLogging {
-        events "passed", "skipped", "failed"
-    }
-}
-
-// Custom task to run Lua scripts
-task runLua(type: JavaExec) {
+// Custom task to run LuaJC compiler
+task runLuaJC(type: JavaExec) {
     group = 'Execution'
-    description = 'Run a Lua script using Luaj'
+    description = 'Run the LuaJC compiler'
     
     classpath = sourceSets.main.runtimeClasspath
-    mainClass = 'lua'
+    mainClass = 'luajc'
     args = ['examples/lua/hello.lua']
 }

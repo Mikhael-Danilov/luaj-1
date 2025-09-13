@@ -16,15 +16,18 @@ Key features of Luaj:
 ## Project Structure
 
 ```
-├── build.gradle              # Gradle build file
+├── build.gradle              # Gradle build file for main module
 ├── settings.gradle           # Gradle settings file
 ├── gradle.properties         # Gradle properties file
 ├── examples/                 # Example code for various use cases
 │   ├── jse/                  # Java SE examples
 │   └── lua/                  # Lua script examples
-├── src/                      # Source code
-│   ├── core/                 # Core Lua implementation
-│   └── jse/                  # Java SE specific extensions
+├── src/                      # Source code for main module
+│   └── core/                 # Core Lua implementation
+├── luajc/                    # Separate module for luajc compiler
+│   └── src/                  # Source code for luajc module
+│       └── main/
+│           └── java/         # Java source files for luajc
 ├── test/                     # Unit tests
 ├── lib/                      # Dependencies (downloaded during build)
 ├── docs/                     # Documentation
@@ -39,6 +42,7 @@ This fork of Luaj has been modified to be compatible with TeaVM, which allows th
 - Removal of Ant build system in favor of Gradle
 - Updates to ensure compatibility with TeaVM's JavaScript generation
 - Focus on JSE-only implementation for better transpilation results
+- Moved luajc compiler to a separate module since it won't work in TeaVM environment
 
 ## Building and Running
 
@@ -51,11 +55,17 @@ This fork of Luaj has been modified to be compatible with TeaVM, which allows th
 The project now uses Gradle for building:
 
 ```bash
-# Build the project
+# Build the entire project (main module + luajc module)
 ./gradlew build
 
 # Build the project without running tests
 ./gradlew assemble
+
+# Build just the main module (without luajc)
+./gradlew :assemble
+
+# Build just the luajc module
+./gradlew :luajc:assemble
 
 # Run the hello.lua example
 ./gradlew runLua
@@ -138,7 +148,17 @@ For Maven-based projects, add the following dependency:
 ```xml
 <dependency>
     <groupId>org.luaj</groupId>
-    <artifactId>luaj-jse</artifactId>
+    <artifactId>luaj</artifactId>
+    <version>3.0.2</version>
+</dependency>
+```
+
+If you need the luajc compiler functionality, you'll also need:
+
+```xml
+<dependency>
+    <groupId>org.luaj</groupId>
+    <artifactId>luajc</artifactId>
     <version>3.0.2</version>
 </dependency>
 ```
@@ -172,7 +192,7 @@ System.out.println("y=" + e.get("y"));
 
 ### Code Organization
 - Core Lua functionality in `src/core/`
-- Java SE extensions in `src/jse/`
+- Java SE extensions in `luajc/src/main/java/`
 
 ### Testing
 Unit tests are organized using JUnit 3 and can be run with:
@@ -200,3 +220,4 @@ This version supports Lua 5.2.x features including:
 - Fixed `yield` keyword conflict in CoroutineLib.java by renaming the class to `yieldFunction`
 - Updated Java source and target compatibility to version 8
 - Modified codebase for TeaVM compatibility
+- Moved luajc compiler to a separate module since it won't work in TeaVM environment
