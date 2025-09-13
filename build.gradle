@@ -45,6 +45,14 @@ jar {
             'Implementation-Vendor': 'Luaj.org'
         )
     }
+    
+    // Include the main class for running Lua scripts
+    from sourceSets.main.output
+    manifest {
+        attributes(
+            'Main-Class': 'lua'
+        )
+    }
 }
 
 // Create a sources JAR

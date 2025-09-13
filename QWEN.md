@@ -23,7 +23,15 @@ Key features of Luaj:
 │   ├── jse/                  # Java SE examples
 │   └── lua/                  # Lua script examples
 ├── src/                      # Source code for main module
-│   └── core/                 # Core Lua implementation
+│   └── core/                 # Core Lua implementation and JSE extensions
+│       ├── org/luaj/vm2/     # Core VM implementation
+│       │   ├── lib/jse/      # JSE-specific libraries
+│       │   ├── script/       # Script engine support
+│       │   ├── server/       # Server-side utilities
+│       │   ├── ast/          # Abstract syntax tree
+│       │   └── parser/       # Lua parser
+│       ├── lua.java          # Main Lua interpreter
+│       └── luac.java         # Lua compiler
 ├── luajc/                    # Separate module for luajc compiler
 │   └── src/                  # Source code for luajc module
 │       └── main/
@@ -43,6 +51,7 @@ This fork of Luaj has been modified to be compatible with TeaVM, which allows th
 - Updates to ensure compatibility with TeaVM's JavaScript generation
 - Focus on JSE-only implementation for better transpilation results
 - Moved luajc compiler to a separate module since it won't work in TeaVM environment
+- Kept essential JSE components (lua.java, luac.java, and JSE libraries) in main module for TeaVM compatibility
 
 ## Building and Running
 
@@ -192,7 +201,8 @@ System.out.println("y=" + e.get("y"));
 
 ### Code Organization
 - Core Lua functionality in `src/core/`
-- Java SE extensions in `luajc/src/main/java/`
+- Java SE extensions in `src/core/org/luaj/vm2/lib/jse/`
+- Luajc compiler in `luajc/src/main/java/org/luaj/vm2/luajc/`
 
 ### Testing
 Unit tests are organized using JUnit 3 and can be run with:
@@ -221,3 +231,4 @@ This version supports Lua 5.2.x features including:
 - Updated Java source and target compatibility to version 8
 - Modified codebase for TeaVM compatibility
 - Moved luajc compiler to a separate module since it won't work in TeaVM environment
+- Kept essential JSE components (lua.java, luac.java, and JSE libraries) in main module for TeaVM compatibility
