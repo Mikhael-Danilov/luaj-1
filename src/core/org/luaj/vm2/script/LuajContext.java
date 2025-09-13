@@ -64,8 +64,7 @@ public class LuajContext extends SimpleScriptContext implements ScriptContext {
 	}
 
 	/** Construct a LuajContext with its own globals, which
-	 * which optionally are debug globals, and optionally use the
-	 * luajc direct lua to java bytecode compiler.
+	 * which optionally are debug globals.
 	 * <p>
 	 * If createDebugGlobals is set, the globals
 	 * created will be a debug globals that includes the debug 
