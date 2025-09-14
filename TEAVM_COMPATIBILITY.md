@@ -45,20 +45,22 @@ Multiple files in `src/core/org/luaj/vm2/lib/jse/` use `java.lang.reflect` packa
 - `Proxy` (50%) - Partial support
 - `InvocationTargetException` (100%) - Fully supported
 
-## Compatibility Issues
-1. **Reflection-heavy components**: The core Java integration features of Luaj rely heavily on reflection, which has only partial support in TeaVM.
-2. **Luajava library**: This key feature for interacting with Java objects from Lua scripts will have significant limitations.
-3. **Dynamic class loading**: Features that dynamically load or inspect Java classes at runtime will not work in TeaVM.
-
 ## TeaVM Target Configuration
 We've created a TeaVM target in the Gradle build system:
 
 1. Added a new `teavm` module in `settings.gradle`
-2. Created a `teavm/build.gradle` file with the TeaVM plugin (version 0.12.3)
+2. Created a `teavm/build.gradle` file with the TeaVM plugin (version 0.13.0-SNAPSHOT from mavenLocal())
 3. Configured the JavaScript generation task
 
 ## Build Results
-When attempting to compile the Luaj library with TeaVM, we encountered a NullPointerException in the TeaVM compiler itself. This is likely due to the incompatibility between the reflection-heavy Luaj codebase and the limited reflection support in TeaVM.
+When attempting to compile the Luaj library with TeaVM 0.13.0-SNAPSHOT, we encountered several specific compatibility errors that confirm our analysis:
+
+1. **System.exit not supported**: TeaVM does not support `System.exit()` calls, which are used in the `lua.java` main class
+2. **Reflection limitations**: Classes like `java.lang.reflect.Proxy` are not available in TeaVM
+3. **Process execution not supported**: Methods like `Runtime.exec()` and classes like `Process` are not available in TeaVM
+4. **Reflection methods not supported**: Methods like `Class.getClasses()` are not available in TeaVM
+
+These errors confirm that the reflection-heavy components of Luaj will not work properly in TeaVM.
 
 ## Recommendations
 1. **Create a TeaVM-specific module**: Develop a version of Luaj that excludes or provides alternative implementations for the reflection-heavy components.
@@ -68,3 +70,5 @@ When attempting to compile the Luaj library with TeaVM, we encountered a NullPoi
 
 ## Conclusion
 While the core Lua VM implementation should work fine in TeaVM (as it primarily uses well-supported Java standard library features), the advanced Java integration features will have significant limitations due to the partial support for reflection in TeaVM. To make Luaj fully compatible with TeaVM, significant modifications would be needed to replace the reflection-based code with TeaVM-compatible alternatives.
+
+The TeaVM 0.13.0-SNAPSHOT version successfully identifies these compatibility issues, confirming our analysis and providing a foundation for future work on TeaVM compatibility.

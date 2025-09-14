@@ -1,9 +1,10 @@
 plugins {
     id 'java-library'
-    id 'org.teavm' version '0.12.3'
+    id 'org.teavm' version '0.13.0-SNAPSHOT'
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
