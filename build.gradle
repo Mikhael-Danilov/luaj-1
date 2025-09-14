@@ -18,10 +18,19 @@ sourceSets {
         java {
             srcDirs = ['src/core']
         }
+        resources {
+            srcDirs = ['src/core/resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java', 'test/java', 'test/junit']
+        }
     }
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 

@@ -362,7 +362,7 @@ public class CoerceLuaToJava {
 		}
 		if ( c.isArray() ) {
 			Class typ = c.getComponentType();
-			co = new ArrayCoercion(c.getComponentType());
+			co = new ArrayCoercion(typ);
 		} else {
 			co = new ObjectCoercion(c);
 		}
