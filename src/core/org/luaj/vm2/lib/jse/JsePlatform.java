@@ -33,8 +33,8 @@ import org.luaj.vm2.lib.PackageLib;
 import org.luaj.vm2.lib.ResourceFinder;
 import org.luaj.vm2.lib.StringLib;
 import org.luaj.vm2.lib.TableLib;
-import org.luaj.vm2.lib.jse.os.JseIoLib;
-import org.luaj.vm2.lib.jse.os.JseOsLib;
+//import org.luaj.vm2.lib.jse.os.JseIoLib;
+//import org.luaj.vm2.lib.jse.os.JseOsLib;
 import org.luaj.vm2.lib.jse.os.LuajavaLib;
 
 /** The {@link org.luaj.vm2.lib.jse.JsePlatform} class is a convenience class to standardize
@@ -103,8 +103,8 @@ public class JsePlatform {
 		globals.load(new JseStringLib());
 		globals.load(new CoroutineLib());
 		globals.load(new JseMathLib());
-		globals.load(new JseIoLib());
-		globals.load(new JseOsLib());
+//		globals.load(new JseIoLib());
+//		globals.load(new JseOsLib());
 		globals.load(new LuajavaLib());
 		LoadState.install(globals);
 		LuaC.install(globals);

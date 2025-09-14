@@ -97,7 +97,7 @@ public class LuajavaLib extends VarArgFunction {
 		"bindClass",
 		"newInstance",
 		"new",
-		"createProxy",
+//		"createProxy",
 		"loadLib",
 	};
 	
@@ -130,7 +130,7 @@ public class LuajavaLib extends VarArgFunction {
 				final Varargs consargs = args.subargs(2);
 				return JavaClass.forClass(clazz).getConstructor().invoke(consargs);
 			}
-				
+/*
 			case CREATEPROXY: {
 				final int niface = args.narg()-1;
 				if ( niface <= 0 )
@@ -151,6 +151,7 @@ public class LuajavaLib extends VarArgFunction {
 				// return the proxy
 				return LuaValue.userdataOf( proxy );
 			}
+ */
 			case LOADLIB: {
 				// get constructor
 				String classname = args.checkjstring(1);
@@ -180,7 +181,7 @@ public class LuajavaLib extends VarArgFunction {
 	protected Class classForName(String name) throws ClassNotFoundException {
 		return Class.forName(name, true, ClassLoader.getSystemClassLoader());
 	}
-	
+	/*
 	private static final class ProxyInvocationHandler implements InvocationHandler {
 		private final LuaValue lobj;
 
@@ -213,5 +214,5 @@ public class LuajavaLib extends VarArgFunction {
 			return CoerceLuaToJava.coerce(result, method.getReturnType());
 		}
 	}
-	
+*/
 }
