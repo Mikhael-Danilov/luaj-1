@@ -2,25 +2,17 @@ package org.luaj.vm2.teavm;
 
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.BaseLib;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.jse.os.LuajavaLib;
 import org.luaj.vm2.LoadState;
+import org.luaj.vm2.lib.jse.JsePlatform;
 
 public class LuajavaLibTest {
     public static void main(String[] args) {
         System.out.println("Testing LuajavaLib compatibility with TeaVM");
         
         try {
-            // Try to instantiate LuajavaLib
-            LuajavaLib lib = new LuajavaLib();
-            System.out.println("LuajavaLib instantiated successfully");
-            
+
             // Create a globals environment and load LuajavaLib
-            Globals globals = new Globals();
-            globals.load(new BaseLib());
-            globals.load(new PackageLib());
-            globals.load(lib);
+            Globals globals = JsePlatform.debugGlobals();
             LoadState.install(globals);
             
             // Try to use luajava.bindClass from Lua

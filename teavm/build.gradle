@@ -22,7 +22,7 @@ sourceSets {
 
 teavm {
     js {
-        mainClass = 'org.luaj.vm2.teavm.SimpleLuaTest'
+        mainClass = 'org.luaj.vm2.teavm.LuajavaLibTest'
         targetFileName = 'luaj.js'
     }
 }
