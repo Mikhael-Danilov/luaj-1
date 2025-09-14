@@ -28,7 +28,6 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.luaj.vm2.lib.jse.JsePlatform;
-import org.luaj.vm2.luajc.LuaJC;
 
 /** 
  * Test compilation of various fragments that have
@@ -38,18 +37,13 @@ import org.luaj.vm2.luajc.LuaJC;
 public class FragmentsTest extends TestSuite {
 
 	static final int TEST_TYPE_LUAC     = 0;
-	static final int TEST_TYPE_LUAJC    = 1;
 
 	public static class JseFragmentsTest extends FragmentsTestCase {
 		public JseFragmentsTest() { super(  TEST_TYPE_LUAC ); }
 	}
-	public static class LuaJCFragmentsTest extends FragmentsTestCase {
-		public LuaJCFragmentsTest() { super(  TEST_TYPE_LUAJC ); }
-	}
 	public static TestSuite suite() {
 		TestSuite suite = new TestSuite("Compiler Fragments Tests");
 		suite.addTest( new TestSuite( JseFragmentsTest.class,      "JSE Fragments Tests" ) );
-		suite.addTest( new TestSuite( LuaJCFragmentsTest.class,    "LuaJC Fragments Tests" ) );
 		return suite;
 	}
 	
@@ -67,17 +61,9 @@ public class FragmentsTest extends TestSuite {
 				Globals globals = JsePlatform.debugGlobals();
 				Reader reader = new StringReader(script);
 				LuaValue chunk ;
-				switch ( TEST_TYPE ) {
-				case TEST_TYPE_LUAJC:
-					LuaJC.install(globals);
-					chunk = globals.load(reader, name);
-					break;
-				default:
-					Prototype p = globals.compilePrototype(reader, name);
-					chunk = new LuaClosure(p, globals);
-					Print.print(p);
-					break;
-				}
+				Prototype p = globals.compilePrototype(reader, name);
+				chunk = new LuaClosure(p, globals);
+				Print.print(p);
 				Varargs actual = chunk.invoke();
 				assertEquals( expected.narg(), actual.narg() );
 				for ( int i=1; i<=actual.narg(); i++ )

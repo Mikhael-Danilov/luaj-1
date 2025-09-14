@@ -2,18 +2,15 @@ package org.luaj.vm2;
 
 import junit.framework.TestCase;
 
-import org.luaj.vm2.lib.jme.JmePlatform;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
 public class MathLibTest extends TestCase {
 
 	private LuaValue j2se;
-	private LuaValue j2me;
 	private boolean supportedOnJ2me;
 
 	public MathLibTest() {
 		j2se = JsePlatform.standardGlobals().get("math");
-		j2me = JmePlatform.standardGlobals().get("math");
 	}
 	
 	protected void setUp() throws Exception {
@@ -21,30 +18,30 @@ public class MathLibTest extends TestCase {
 	}
 
 	public void testMathDPow() {
-		assertEquals( 1, j2mepow(2, 0), 0 );
-		assertEquals( 2, j2mepow(2, 1), 0 );
-		assertEquals( 8, j2mepow(2, 3), 0 );
-		assertEquals( -8, j2mepow(-2, 3), 0 );
-		assertEquals( 1/8., j2mepow(2, -3), 0 );
-		assertEquals( -1/8., j2mepow(-2, -3), 0 );
-		assertEquals( 16, j2mepow(256,  .5), 0 );
-		assertEquals(  4, j2mepow(256, .25), 0 );
-		assertEquals( 64, j2mepow(256, .75), 0 );
-		assertEquals( 1./16, j2mepow(256, - .5), 0 );
-		assertEquals( 1./ 4, j2mepow(256, -.25), 0 );
-		assertEquals( 1./64, j2mepow(256, -.75), 0 );
-		assertEquals( Double.NaN, j2mepow(-256,  .5), 0 );
-		assertEquals(   1, j2mepow(.5, 0), 0 );
-		assertEquals(  .5, j2mepow(.5, 1), 0 );
-		assertEquals(.125, j2mepow(.5, 3), 0 );
-		assertEquals(   2, j2mepow(.5, -1), 0 );
-		assertEquals(   8, j2mepow(.5, -3), 0 );
-		assertEquals(1, j2mepow(0.0625, 0), 0 );
-		assertEquals(0.00048828125, j2mepow(0.0625, 2.75), 0 );
+		assertEquals( 1, j2sepow(2, 0), 0 );
+		assertEquals( 2, j2sepow(2, 1), 0 );
+		assertEquals( 8, j2sepow(2, 3), 0 );
+		assertEquals( -8, j2sepow(-2, 3), 0 );
+		assertEquals( 1/8., j2sepow(2, -3), 0 );
+		assertEquals( -1/8., j2sepow(-2, -3), 0 );
+		assertEquals( 16, j2sepow(256,  .5), 0 );
+		assertEquals(  4, j2sepow(256, .25), 0 );
+		assertEquals( 64, j2sepow(256, .75), 0 );
+		assertEquals( 1./16, j2sepow(256, - .5), 0 );
+		assertEquals( 1./ 4, j2sepow(256, -.25), 0 );
+		assertEquals( 1./64, j2sepow(256, -.75), 0 );
+		assertEquals( Double.NaN, j2sepow(-256,  .5), 0 );
+		assertEquals(   1, j2sepow(.5, 0), 0 );
+		assertEquals(  .5, j2sepow(.5, 1), 0 );
+		assertEquals(.125, j2sepow(.5, 3), 0 );
+		assertEquals(   2, j2sepow(.5, -1), 0 );
+		assertEquals(   8, j2sepow(.5, -3), 0 );
+		assertEquals(1, j2sepow(0.0625, 0), 0 );
+		assertEquals(0.00048828125, j2sepow(0.0625, 2.75), 0 );
 	}
 	
-	private double j2mepow(double x, double y) {
-		return j2me.get("pow").call(LuaValue.valueOf(x),LuaValue.valueOf(y)).todouble();
+	private double j2sepow(double x, double y) {
+		return j2se.get("pow").call(LuaValue.valueOf(x),LuaValue.valueOf(y)).todouble();
 	}
 
 	public void testAbs() {
@@ -204,7 +201,7 @@ public class MathLibTest extends TestCase {
 	private void tryMathOp(String op, double x) {		
 		try {
 			double expected = j2se.get(op).call( LuaValue.valueOf(x)).todouble();
-			double actual = j2me.get(op).call( LuaValue.valueOf(x)).todouble();
+			double actual = j2se.get(op).call( LuaValue.valueOf(x)).todouble();
 			if ( supportedOnJ2me )
 				assertEquals( expected, actual, 1.e-4 );
 			else
@@ -219,7 +216,7 @@ public class MathLibTest extends TestCase {
 	private void tryMathOp(String op, double a, double b) {
 		try {
 			double expected = j2se.get(op).call( LuaValue.valueOf(a), LuaValue.valueOf(b)).todouble();
-			double actual = j2me.get(op).call( LuaValue.valueOf(a), LuaValue.valueOf(b)).todouble();
+			double actual = j2se.get(op).call( LuaValue.valueOf(a), LuaValue.valueOf(b)).todouble();
 			if ( supportedOnJ2me )
 				assertEquals( expected, actual, 1.e-5 );
 			else

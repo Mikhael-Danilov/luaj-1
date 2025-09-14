@@ -35,15 +35,15 @@ import java.net.URL;
 import junit.framework.TestCase;
 
 import org.luaj.vm2.lib.ResourceFinder;
-import org.luaj.vm2.lib.jse.JseProcess;
-import org.luaj.vm2.luajc.LuaJC;
+import org.luaj.vm2.lib.jse.JsePlatform;
+import org.luaj.vm2.lib.jse.os.JseProcess;
 
 abstract
 public class ScriptDrivenTest extends TestCase implements ResourceFinder {
 	public static final boolean nocompile = "true".equals(System.getProperty("nocompile"));
 
 	public enum PlatformType {
-		JME, JSE, LUAJIT,
+		JSE,
 	}
 	
 	private final PlatformType platform;
@@ -63,11 +63,7 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
 		switch ( platform ) {
 		default:
 		case JSE:
-		case LUAJIT:
-			globals = org.luaj.vm2.lib.jse.JsePlatform.debugGlobals();
-			break;
-		case JME:
-			globals = org.luaj.vm2.lib.jme.JmePlatform.debugGlobals();
+			globals = JsePlatform.debugGlobals();
 			break;
 		}
 	}
@@ -178,29 +174,18 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
 	}
 
 	protected LuaValue loadScript(String name, Globals globals) throws IOException {
-		InputStream script = this.findResource(name+".lua");
-		if ( script == null )
-			fail("Could not load script for test case: " + name);
-		try {
-			switch ( this.platform ) {
-			case LUAJIT:
-				if ( nocompile ) {
-					LuaValue c = (LuaValue) Class.forName(name).newInstance();
-					return c;
-				} else {
-					LuaJC.install(globals);
-					return globals.load(script, name, "bt", globals);
-				}
-			default:
+			InputStream script = this.findResource(name+".lua");
+			if ( script == null )
+				fail("Could not load script for test case: " + name);
+			try {
 				return globals.load(script, "@"+name+".lua", "bt", globals);
+			} catch ( Exception e ) {
+				e.printStackTrace();
+				throw new IOException( e.toString() );
+			} finally {
+				script.close();
 			}
-		} catch ( Exception e ) {
-			e.printStackTrace();
-			throw new IOException( e.toString() );
-		} finally {
-			script.close();
 		}
-	}
 
 	private String getExpectedOutput(final String name) throws IOException,
 			InterruptedException {
