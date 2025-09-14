@@ -890,6 +890,55 @@ A build script for running unit tests and producing code coverage statistics is 
 
 It relies on the cobertura code coverage library.
 
+<h2><a name="teavm">TeaVM Browser Build</a></h2>
+
+<p>
+This fork of Luaj includes support for compiling to JavaScript using TeaVM, allowing the Lua interpreter to run in web browsers.
+
+<h3>Building the JavaScript Bundle</h3>
+
+To build the TeaVM JavaScript bundle, use the Gradle task:
+
+<pre>
+   ./gradlew :teavm:generateJavaScript
+</pre>
+
+This will generate a JavaScript file at:
+<pre>
+   teavm/build/generated/teavm/js/luaj.js
+</pre>
+
+The generated file is approximately 225KB and contains a complete Lua interpreter that can run in any modern web browser.
+
+<h3>Testing the Browser Build</h3>
+
+A simple HTML test page is included at:
+<pre>
+   teavm/src/main/resources/test.html
+</pre>
+
+To test the JavaScript build:
+1. Copy the test.html file to the same directory as the generated luaj.js file
+2. Serve the directory using a local web server (e.g., Python's http.server)
+3. Open the test page in a browser to verify functionality
+
+<h3>Limitations</h3>
+
+Due to browser security restrictions, the following features are not available in the TeaVM build:
+<ul>
+<li>File I/O operations</li>
+<li>Process execution</li>
+<li>Network access outside browser CORS restrictions</li>
+<li>Advanced reflection capabilities</li>
+<li>Luajava library for binding Java classes (limited support)</li>
+</ul>
+
+For more details about TeaVM compatibility, see:
+<pre>
+   TEAVM_BUILD_REPORT.md
+   LUAJAVALIB_TEAVM_COMPATIBILITY.md
+</pre>
+
 <h1>8 - <a name="8">Downloads</a></h1>
 
 <h2>Downloads and Project Pages</h2>
