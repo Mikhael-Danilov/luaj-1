@@ -12,9 +12,17 @@ dependencies {
     implementation project(':')
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
 teavm {
     js {
-        mainClass = 'lua'
+        mainClass = 'org.luaj.vm2.teavm.SimpleLuaTest'
         targetFileName = 'luaj.js'
     }
 }

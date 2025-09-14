@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Luaj in Browser Test</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Luaj JavaScript Interpreter Test</h1>
+    <p>This page demonstrates the Luaj interpreter running in the browser via TeaVM transpilation.</p>
+    
+    <div>
+        <h2>Test Output:</h2>
+        <pre id="output"></pre>
+    </div>
+
+    <script>
+        // Capture console output
+        const outputElement = document.getElementById('output');
+        const originalLog = console.log;
+        console.log = function(message) {
+            outputElement.textContent += message + '\n';
+            originalLog.apply(console, arguments);
+        };
+    </script>
+    
+    <!-- Load the transpiled Lua interpreter -->
+    <script src="luaj.js"></script>
+    
+    <script>
+        // The TeaVM-generated code should automatically run our main method
+        // which will execute the Lua code and print the result
+        console.log('Lua interpreter loaded and executed.');
+        console.log('Check browser console for any errors.');
+    </script>
+</body>
+</html>
